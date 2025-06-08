@@ -8,6 +8,7 @@ const SOURCES = {
   outkick: "Outkick",
   techcrunch: "TechCrunch",
   marketwatch: "MarketWatch",
+  dailysignal: "Daily Signal",
   yahoosports: "Yahoo Sports"
 };
 
@@ -33,10 +34,11 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gray-50 p-4">
+      {/* Header */}
       <header className="mb-6 border-b pb-4 flex flex-col sm:flex-row sm:items-end sm:justify-between">
         <div>
           <h1 className="text-4xl font-extrabold text-gray-900 mb-1">NewsNow</h1>
-          <p className="text-sm text-gray-600">Last updated: {lastUpdated}</p>
+          <p className="text-sm text-gray-600">Your Daily Source for News, Sports & More</p>
         </div>
         <nav className="flex flex-wrap gap-2 mt-4 sm:mt-0">
           {Object.entries(SOURCES).map(([key, label]) => (
@@ -55,6 +57,7 @@ export default function Home() {
         </nav>
       </header>
 
+      {/* Main content */}
       <main className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {articles.map((article, index) => (
           <a
@@ -69,7 +72,15 @@ export default function Home() {
               alt={article.title || "NewsNow Article"}
               className="w-full h-48 object-cover mb-2 rounded"
             />
-            <h2 className="font-semibold text-lg mb-1">{article.title}</h2>
+            <h2 className="font-semibold text-lg mb-1 flex items-center">
+              {article.title}
+              {article.pubDate &&
+                new Date() - new Date(article.pubDate) < 3600000 && ( // 1 hour in ms
+                  <span className="ml-2 px-2 py-0.5 text-xs font-bold text-white bg-red-500 rounded">
+                    NEW
+                  </span>
+                )}
+            </h2>
             <p className="text-sm text-gray-500">
               {article.source} • {new Date(article.pubDate).toLocaleString()}
             </p>
@@ -77,18 +88,12 @@ export default function Home() {
         ))}
       </main>
 
-      <aside className="mt-10 flex flex-col gap-4 sm:w-64">
-        <div className="bg-white rounded-lg shadow p-4">
-          <h3 className="font-semibold mb-2">Follow Us</h3>
-          <p className="text-sm text-gray-600">Tweets by BBCBreaking</p>
-        </div>
-        <div className="bg-white rounded-lg shadow p-4">
-          <h3 className="font-semibold mb-2">Advertisement</h3>
-          <div className="w-full h-32 bg-gray-100 flex items-center justify-center text-gray-400 text-sm">
-            Ad Space
-          </div>
-        </div>
-      </aside>
+      {/* Footer */}
+      <footer className="mt-10 py-6 border-t text-center text-sm text-gray-500 space-x-4">
+        <a href="#" className="hover:text-gray-700">About</a>
+        <a href="#" className="hover:text-gray-700">Privacy Policy</a>
+        <span>© {new Date().getFullYear()} NewsNow</span>
+      </footer>
     </div>
   );
 }
