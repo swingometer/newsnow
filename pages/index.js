@@ -34,7 +34,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="bg-white shadow max-w-screen-xl mx-auto">
+      <div className="bg-white shadow max-w-screen-xl mx-auto my-8">
         {/* Header */}
         <header className="mb-6 border-b pb-4 px-4 flex flex-col sm:flex-row sm:items-end sm:justify-between">
           <div>
