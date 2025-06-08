@@ -1,49 +1,47 @@
-import Parser from 'rss-parser';
+import Parser from "rss-parser";
 
-const parser = new Parser({
-  customFields: {
-    item: ['media:content', 'enclosure']
-  }
-});
+const parser = new Parser();
 
-const FEED_SOURCES = {
-  bbc: 'http://feeds.bbci.co.uk/news/rss.xml',
-  reuters: 'http://feeds.reuters.com/reuters/topNews',
-  guardian: 'https://www.theguardian.com/uk/rss',
-  techcrunch: 'http://feeds.feedburner.com/TechCrunch/'
+const FEEDS = {
+  bbc: "http://feeds.bbci.co.uk/news/rss.xml",
+  nypost: "https://nypost.com/feed/",
+  dailywire: "https://www.dailywire.com/feeds/rss.xml",
+  breitbart: "https://feeds.feedburner.com/breitbart",
+  outkick: "https://www.outkick.com/feed/",
+  techcrunch: "http://feeds.feedburner.com/TechCrunch/",
+  marketwatch: "https://feeds.marketwatch.com/marketwatch/topstories/",
+  lifesitenews: "https://www.lifesitenews.com/rss/news",
+  yahoosports: "https://sports.yahoo.com/rss/"
 };
 
 export default async function handler(req, res) {
-  const { source = 'bbc' } = req.query;
-  const feedUrl = FEED_SOURCES[source];
+  const { source } = req.query;
 
-  if (!feedUrl) {
-    return res.status(400).json({ error: 'Invalid or unsupported news source.' });
+  if (!FEEDS[source]) {
+    return res.status(400).json({ error: "Invalid source" });
   }
 
   try {
-    const feed = await parser.parseURL(feedUrl);
+    const feed = await parser.parseURL(FEEDS[source]);
 
-    const articles = feed.items.map(item => {
-      let image = null;
-      if (item['media:content'] && item['media:content']['$']?.url) {
-        image = item['media:content']['$'].url;
-      } else if (item.enclosure?.url) {
-        image = item.enclosure.url;
-      }
-
-      return {
-        title: item.title,
-        link: item.link,
-        pubDate: item.pubDate,
-        source: feed.title,
-        image
-      };
-    });
+    const articles = feed.items.map((item) => ({
+      title: item.title,
+      link: item.link,
+      pubDate: item.pubDate,
+      source: feed.title,
+      image: item.enclosure?.url || extractImage(item.content) || null
+    }));
 
     res.status(200).json({ articles });
   } catch (error) {
-    console.error('Failed to fetch RSS feed:', error);
-    res.status(500).json({ error: 'Failed to fetch RSS feed' });
+    console.error("Error fetching feed:", error);
+    res.status(500).json({ error: "Failed to fetch feed" });
   }
+}
+
+function extractImage(content) {
+  if (!content) return null;
+  const imgRegex = /<img[^>]+src="([^">]+)"/;
+  const match = content.match(imgRegex);
+  return match ? match[1] : null;
 }
