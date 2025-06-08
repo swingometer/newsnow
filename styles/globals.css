@@ -2,73 +2,48 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Typography */
+/* Base typography */
 body {
-  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  font-size: 16px;
-  line-height: 1.6;
-  color: #1a1a1a;
-  background-color: #f9fafb;
+  @apply font-sans text-base leading-relaxed text-gray-900 bg-gray-50;
 }
 
-/* Links */
-a {
-  color: #1a0dab;
-  text-decoration: none;
-}
-
-a:hover {
-  text-decoration: underline;
+/* Container utility — center content with padding */
+.container {
+  @apply max-w-screen-xl mx-auto px-4;
 }
 
 /* Headings */
 h1, h2, h3, h4, h5, h6 {
-  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  font-weight: 700;
-  line-height: 1.2;
-  color: #111827;
+  @apply font-bold leading-tight text-gray-900;
 }
 
-/* Buttons */
+/* Links */
+a {
+  @apply text-blue-700 hover:underline;
+}
+
+/* Buttons (shared styling) */
 button {
-  font-family: inherit;
-  font-weight: 500;
-  border-radius: 6px;
-  padding: 0.5rem 1rem;
-  cursor: pointer;
-  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+  @apply font-medium rounded px-4 py-2 transition duration-200 ease-in-out;
 }
-
 button:hover {
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  @apply shadow;
 }
 
 /* Cards */
 .card {
-  background-color: #ffffff;
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-  padding: 1rem;
-  transition: box-shadow 0.2s ease, transform 0.2s ease;
+  @apply bg-white border border-gray-200 rounded-lg shadow-sm p-4 transition-transform transform hover:-translate-y-1 hover:shadow-lg;
 }
 
-.card:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  transform: translateY(-2px);
-}
-
-/* Fallback image styling (universal) */
+/* Fallback image styling */
 img[src$="fallback.svg"] {
-  background-color: #f3f4f6;
-  object-fit: cover;
+  @apply bg-gray-100 object-cover;
 }
 
-/* Small tweaks */
+/* Utility tweaks */
 .text-muted {
-  color: #6b7280;
+  @apply text-gray-500;
 }
-
 .bg-muted {
-  background-color: #f3f4f6;
+  @apply bg-gray-100;
 }
