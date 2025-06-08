@@ -33,7 +33,7 @@ export default function Home() {
   }, [source]);
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4">
+    <div className="min-h-screen bg-gray-50 p-4 max-w-screen-xl mx-auto">
       {/* Header */}
       <header className="mb-6 border-b pb-4 flex flex-col sm:flex-row sm:items-end sm:justify-between">
         <div>
