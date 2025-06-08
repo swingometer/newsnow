@@ -8,14 +8,13 @@ const SOURCES = {
   outkick: "Outkick",
   techcrunch: "TechCrunch",
   marketwatch: "MarketWatch",
-  lifesitenews: "LifeSite News",
   yahoosports: "Yahoo Sports"
 };
 
 export default function Home() {
   const [articles, setArticles] = useState([]);
   const [source, setSource] = useState("bbc");
-  const [lastUpdated, setLastUpdated] = useState(null);
+  const [lastUpdated, setLastUpdated] = useState("");
 
   useEffect(() => {
     async function fetchNews() {
@@ -34,20 +33,20 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gray-50 p-4">
-      <header className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 border-b pb-2">
+      <header className="mb-6 border-b pb-4 flex flex-col sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">NewsNow</h1>
-          <p className="text-sm text-gray-500">Last updated: {lastUpdated}</p>
+          <h1 className="text-4xl font-extrabold text-gray-900 mb-1">NewsNow</h1>
+          <p className="text-sm text-gray-600">Last updated: {lastUpdated}</p>
         </div>
-        <nav className="flex flex-wrap gap-2 mt-2 sm:mt-0">
+        <nav className="flex flex-wrap gap-2 mt-4 sm:mt-0">
           {Object.entries(SOURCES).map(([key, label]) => (
             <button
               key={key}
               onClick={() => setSource(key)}
-              className={`px-3 py-1 rounded border ${
+              className={`px-4 py-2 rounded border text-sm ${
                 source === key
-                  ? "bg-gray-800 text-white"
-                  : "bg-white text-gray-800 hover:bg-gray-200"
+                  ? "bg-gray-200 text-gray-900 border-gray-400"
+                  : "bg-white text-gray-700 border-gray-300 hover:bg-gray-100"
               }`}
             >
               {label}
@@ -56,54 +55,40 @@ export default function Home() {
         </nav>
       </header>
 
-      <div className="flex flex-col lg:flex-row gap-4">
-        <main className="grid grid-cols-1 md:grid-cols-2 gap-4 flex-1">
-          {articles.map((article, index) => (
-            <a
-              key={index}
-              href={article.link}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="block border rounded p-4 hover:shadow transition"
-            >
-              {article.image ? (
-                <img
-                  src={article.image}
-                  alt={article.title}
-                  className="w-full h-48 object-cover mb-2 rounded"
-                  onError={(e) => {
-                    e.target.onerror = null;
-                    e.target.src = "/fallback.svg";
-                  }}
-                />
-              ) : (
-                <img
-                  src="/fallback.jpg"
-                  alt="fallback"
-                  className="w-full h-48 object-cover mb-2 rounded"
-                />
-              )}
-              <h2 className="font-bold text-lg mb-1">{article.title}</h2>
-              <p className="text-sm text-gray-600">
-                {article.source} • {article.pubDate}
-              </p>
-            </a>
-          ))}
-        </main>
+      <main className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {articles.map((article, index) => (
+          <a
+            key={index}
+            href={article.link}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="bg-white rounded-lg shadow hover:shadow-lg transition duration-200 p-4 flex flex-col"
+          >
+            <img
+              src={article.image || "/fallback.svg"}
+              alt={article.title || "NewsNow Article"}
+              className="w-full h-48 object-cover mb-2 rounded"
+            />
+            <h2 className="font-semibold text-lg mb-1">{article.title}</h2>
+            <p className="text-sm text-gray-500">
+              {article.source} • {new Date(article.pubDate).toLocaleString()}
+            </p>
+          </a>
+        ))}
+      </main>
 
-        <aside className="w-full lg:w-64 flex flex-col gap-4">
-          <div className="border p-4 rounded">
-            <h3 className="font-semibold mb-2">Follow Us</h3>
-            <p>Tweets by BBCBreaking</p>
+      <aside className="mt-10 flex flex-col gap-4 sm:w-64">
+        <div className="bg-white rounded-lg shadow p-4">
+          <h3 className="font-semibold mb-2">Follow Us</h3>
+          <p className="text-sm text-gray-600">Tweets by BBCBreaking</p>
+        </div>
+        <div className="bg-white rounded-lg shadow p-4">
+          <h3 className="font-semibold mb-2">Advertisement</h3>
+          <div className="w-full h-32 bg-gray-100 flex items-center justify-center text-gray-400 text-sm">
+            Ad Space
           </div>
-          <div className="border p-4 rounded">
-            <h3 className="font-semibold mb-2">Advertisement</h3>
-            <div className="bg-gray-200 h-32 flex items-center justify-center text-gray-500">
-              Ad Space
-            </div>
-          </div>
-        </aside>
-      </div>
+        </div>
+      </aside>
     </div>
   );
 }

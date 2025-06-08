@@ -9,9 +9,9 @@ const FEEDS = {
   breitbart: "https://feeds.feedburner.com/breitbart",
   outkick: "https://www.outkick.com/feed/",
   techcrunch: "http://feeds.feedburner.com/TechCrunch/",
-  marketwatch: "https://feeds.marketwatch.com/marketwatch/topstories/",
-  lifesitenews: "https://www.lifesitenews.com/rss/news",
-  yahoosports: "https://sports.yahoo.com/rss/"
+  marketwatch: "https://www.marketwatch.com/rss/topstories",
+  dailysignal: "https://www.dailysignal.com/feed/",
+  yahoosports: "https://sports.yahoo.com/mlb/rss.xml"
 };
 
 export default async function handler(req, res) {
@@ -24,13 +24,15 @@ export default async function handler(req, res) {
   try {
     const feed = await parser.parseURL(FEEDS[source]);
 
-    const articles = feed.items.map((item) => ({
-      title: item.title,
-      link: item.link,
-      pubDate: item.pubDate,
-      source: feed.title,
-      image: item.enclosure?.url || extractImage(item.content) || null
-    }));
+    const articles = feed.items
+      .filter((item) => item.title && item.link) // filter empty items
+      .map((item) => ({
+        title: item.title,
+        link: item.link,
+        pubDate: item.pubDate,
+        source: feed.title,
+        image: item.enclosure?.url || extractImage(item.content) || extractImage(item["content:encoded"]) || null
+      }));
 
     res.status(200).json({ articles });
   } catch (error) {
