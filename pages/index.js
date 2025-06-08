@@ -33,9 +33,9 @@ export default function Home() {
   }, [source]);
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4">
+    <div className="min-h-screen bg-gray-50 p-4 max-w-screen-xl mx-auto">
       {/* Header */}
-      <header className="max-w-screen-xl mx-auto mb-6 border-b pb-4 flex flex-col sm:flex-row sm:items-end sm:justify-between">
+      <header className="mb-6 border-b pb-4 flex flex-col sm:flex-row sm:items-end sm:justify-between">
         <div>
           <h1 className="text-4xl font-extrabold text-gray-900 mb-1">NewsNow</h1>
           <p className="text-sm text-gray-600">Your Daily Source for News, Sports & More</p>
@@ -58,40 +58,38 @@ export default function Home() {
       </header>
 
       {/* Main content */}
-      <main className="flex justify-center">
-        <div className="max-w-screen-xl w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {articles.map((article, index) => (
-            <a
-              key={index}
-              href={article.link}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-white rounded-lg shadow hover:shadow-lg transition duration-200 p-4 flex flex-col"
-            >
-              <img
-                src={article.image || "/fallback.svg"}
-                alt={article.title || "NewsNow Article"}
-                className="w-full h-48 object-cover mb-2 rounded"
-              />
-              <h2 className="font-semibold text-lg mb-1 flex items-center">
-                {article.title}
-                {article.pubDate &&
-                  new Date() - new Date(article.pubDate) < 3600000 && ( // 1 hour in ms
-                    <span className="ml-2 px-2 py-0.5 text-xs font-bold text-white bg-red-500 rounded">
-                      NEW
-                    </span>
-                  )}
-              </h2>
-              <p className="text-sm text-gray-500">
-                {article.source} • {new Date(article.pubDate).toLocaleString()}
-              </p>
-            </a>
-          ))}
-        </div>
+      <main className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {articles.map((article, index) => (
+          <a
+            key={index}
+            href={article.link}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="bg-white rounded-lg shadow hover:shadow-lg transition duration-200 p-4 flex flex-col"
+          >
+            <img
+              src={article.image || "/fallback.svg"}
+              alt={article.title || "NewsNow Article"}
+              className="w-full h-48 object-cover mb-2 rounded"
+            />
+            <h2 className="font-semibold text-lg mb-1 flex items-center">
+              {article.title}
+              {article.pubDate &&
+                new Date() - new Date(article.pubDate) < 3600000 && ( // 1 hour in ms
+                  <span className="ml-2 px-2 py-0.5 text-xs font-bold text-white bg-red-500 rounded">
+                    NEW
+                  </span>
+                )}
+            </h2>
+            <p className="text-sm text-gray-500">
+              {article.source} • {new Date(article.pubDate).toLocaleString()}
+            </p>
+          </a>
+        ))}
       </main>
 
       {/* Footer */}
-      <footer className="max-w-screen-xl mx-auto mt-10 py-6 border-t text-center text-sm text-gray-500 space-x-4">
+      <footer className="mt-10 py-6 border-t text-center text-sm text-gray-500 space-x-4">
         <a href="#" className="hover:text-gray-700">About</a>
         <a href="#" className="hover:text-gray-700">Privacy Policy</a>
         <span>© {new Date().getFullYear()} NewsNow</span>
