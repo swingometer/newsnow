@@ -33,7 +33,7 @@ export default function Home() {
   }, [source]);
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4 max-w-screen-xl mx-auto">
+    <div className="min-h-screen bg-gray-50 max-w-screen-xl mx-auto">
       {/* Header */}
       <header className="mb-6 border-b pb-4 flex flex-col sm:flex-row sm:items-end sm:justify-between">
         <div>
@@ -58,7 +58,7 @@ export default function Home() {
       </header>
 
       {/* Main content */}
-      <main className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <main className="px-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {articles.map((article, index) => (
           <a
             key={index}
