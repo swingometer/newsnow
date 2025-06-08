@@ -15,7 +15,7 @@ const SOURCES = {
 export default function Home() {
   const [articles, setArticles] = useState([]);
   const [source, setSource] = useState("bbc");
-  const [lastUpdated, setLastUpdated] = useState("");
+  const [lastUpdated, setLastUpdated] = useState(null);
 
   useEffect(() => {
     async function fetchNews() {
@@ -33,82 +33,77 @@ export default function Home() {
   }, [source]);
 
   return (
-    <div className="min-h-screen bg-white text-gray-900">
-      <header className="bg-white shadow-sm border-b p-4 md:p-6 mb-4">
-        <div className="flex flex-col md:flex-row md:justify-between md:items-center max-w-6xl mx-auto space-y-2 md:space-y-0">
-          <h1 className="text-3xl font-bold tracking-tight text-gray-900">NewsNow</h1>
-          <nav className="flex flex-wrap gap-2">
-            {Object.entries(SOURCES).map(([key, label]) => (
-              <button
-                key={key}
-                onClick={() => setSource(key)}
-                className={`text-xs md:text-sm px-3 py-2 rounded border ${
-                  source === key
-                    ? 'bg-gray-100 border-gray-400 font-semibold'
-                    : 'bg-white border-gray-300 hover:bg-gray-100'
-                } transition shadow-sm`}
-              >
-                {label}
-              </button>
-            ))}
-          </nav>
+    <div className="min-h-screen bg-gray-50 p-4">
+      <header className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 border-b pb-2">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900">NewsNow</h1>
+          <p className="text-sm text-gray-500">Last updated: {lastUpdated}</p>
         </div>
-        <div className="max-w-6xl mx-auto text-xs text-gray-500 mt-2">
-          Last updated: {lastUpdated}
-        </div>
+        <nav className="flex flex-wrap gap-2 mt-2 sm:mt-0">
+          {Object.entries(SOURCES).map(([key, label]) => (
+            <button
+              key={key}
+              onClick={() => setSource(key)}
+              className={`px-3 py-1 rounded border ${
+                source === key
+                  ? "bg-gray-800 text-white"
+                  : "bg-white text-gray-800 hover:bg-gray-200"
+              }`}
+            >
+              {label}
+            </button>
+          ))}
+        </nav>
       </header>
 
-      <main className="max-w-6xl mx-auto px-4 grid grid-cols-1 lg:grid-cols-4 gap-8">
-        <section className="lg:col-span-3 grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div className="flex flex-col lg:flex-row gap-4">
+        <main className="grid grid-cols-1 md:grid-cols-2 gap-4 flex-1">
           {articles.map((article, index) => (
             <a
               key={index}
               href={article.link}
               target="_blank"
               rel="noopener noreferrer"
-              className="block border border-gray-200 rounded-lg shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-transform transform overflow-hidden bg-white"
+              className="block border rounded p-4 hover:shadow transition"
             >
-              <img
-                src={article.image || "https://via.placeholder.com/640x360?text=NewsNow"}
-                alt=""
-                className="w-full h-48 object-cover mb-3"
-              />
-              <div className="p-4">
-                <h2 className="text-lg font-semibold leading-snug mb-2">{article.title}</h2>
-                <p className="text-xs text-gray-500">
-                  {article.source} • {new Date(article.pubDate).toLocaleString()}
-                </p>
-              </div>
+              {article.image ? (
+                <img
+                  src={article.image}
+                  alt={article.title}
+                  className="w-full h-48 object-cover mb-2 rounded"
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = "/fallback.svg";
+                  }}
+                />
+              ) : (
+                <img
+                  src="/fallback.jpg"
+                  alt="fallback"
+                  className="w-full h-48 object-cover mb-2 rounded"
+                />
+              )}
+              <h2 className="font-bold text-lg mb-1">{article.title}</h2>
+              <p className="text-sm text-gray-600">
+                {article.source} • {article.pubDate}
+              </p>
             </a>
           ))}
-        </section>
+        </main>
 
-        <aside className="lg:col-span-1 space-y-6">
-          <div className="bg-white border border-gray-200 p-4 rounded-lg shadow-sm">
-            <h3 className="text-md font-bold mb-2">Follow Us</h3>
-            <a
-              className="twitter-timeline"
-              data-height="400"
-              href="https://twitter.com/BBCBreaking?ref_src=twsrc%5Etfw"
-            >
-              Tweets by BBCBreaking
-            </a>
+        <aside className="w-full lg:w-64 flex flex-col gap-4">
+          <div className="border p-4 rounded">
+            <h3 className="font-semibold mb-2">Follow Us</h3>
+            <p>Tweets by BBCBreaking</p>
           </div>
-
-          <div className="bg-white border border-gray-200 p-4 rounded-lg shadow-sm">
-            <h3 className="text-md font-bold mb-2">Advertisement</h3>
-            <div className="w-full h-32 bg-gray-200 flex items-center justify-center text-sm text-gray-500">
+          <div className="border p-4 rounded">
+            <h3 className="font-semibold mb-2">Advertisement</h3>
+            <div className="bg-gray-200 h-32 flex items-center justify-center text-gray-500">
               Ad Space
             </div>
           </div>
         </aside>
-      </main>
-
-      <footer className="max-w-6xl mx-auto text-center p-6 text-xs text-gray-400 border-t mt-6">
-        © 2025 NewsNow. All rights reserved.
-      </footer>
-
-      <script async src="https://platform.twitter.com/widgets.js" charSet="utf-8"></script>
+      </div>
     </div>
   );
 }
