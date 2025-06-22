@@ -15,68 +15,31 @@ const SOURCES = {
 
 export default function Home() {
   const [articles, setArticles] = useState([]);
-  const [source, setSource] = useState("bbc");
-  const [lastUpdated, setLastUpdated] = useState("");
 
   useEffect(() => {
-    async function fetchNews() {
-      try {
+    async function fetchAllNews() {
+      let allStories = [];
+      for (const source of Object.keys(SOURCES)) {
         const res = await fetch(`/api/news?source=${source}`);
         const data = await res.json();
-        setArticles(data.articles || []);
-        setLastUpdated(new Date().toLocaleString());
-      } catch (err) {
-        console.error("Error fetching news:", err);
+        const sourceStories = (data.articles || []).slice(0, 3).map(a => ({
+          ...a,
+          sourceName: SOURCES[source]
+        }));
+        allStories = allStories.concat(sourceStories);
       }
+      setArticles(allStories);
     }
-
-    fetchNews();
-  }, [source]);
+    fetchAllNews();
+  }, []);
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="max-w-screen-xl mx-auto px-4 py-6 border-b">
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end">
-          <div>
-            <h1 className="text-4xl font-extrabold text-gray-900 mb-1">NewsNow</h1>
-            <p className="text-sm text-gray-600">Your Daily Source for News, Sports & More</p>
-            <p className="text-xs text-gray-400 mt-1">Last updated: {lastUpdated}</p>
-          </div>
-          <nav className="flex flex-wrap gap-2 mt-4 sm:mt-0">
-            {Object.entries(SOURCES).map(([key, label]) => (
-              <button
-                key={key}
-                onClick={() => setSource(key)}
-                className={`px-4 py-2 rounded border text-sm transition ${
-                  source === key
-                    ? "bg-gray-200 text-gray-900 border-gray-400"
-                    : "bg-white text-gray-700 border-gray-300 hover:bg-gray-100"
-                }`}
-              >
-                {label}
-              </button>
-            ))}
-          </nav>
-        </div>
-      </header>
-
-      {/* Main content */}
-      <main className="max-w-screen-xl mx-auto px-4 my-8">
-        {/* Article Grid */}
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {articles.map((article, index) => (
-            <ArticleCard article={article} key={index} />
-          ))}
-        </div>
-      </main>
-
-      {/* Footer */}
-      <footer className="max-w-screen-xl mx-auto px-4 py-6 border-t text-center text-sm text-gray-500 space-x-4">
-        <a href="#" className="hover:text-gray-700">About</a>
-        <a href="#" className="hover:text-gray-700">Privacy Policy</a>
-        <span>© {new Date().getFullYear()} NewsNow</span>
-      </footer>
-    </div>
+    <main className="max-w-screen-xl mx-auto px-4 my-8">
+      <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+        {articles.map((article, index) => (
+          <ArticleCard article={article} key={index} />
+        ))}
+      </div>
+    </main>
   );
 }

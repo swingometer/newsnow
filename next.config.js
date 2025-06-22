@@ -1,22 +1,29 @@
-/** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: [
-      "nypost.com",
-            "pagesix.com",
-      // Add more domains as you add more news sources:
-      "bbc.co.uk",
-      "ichef.bbci.co.uk",
-      "media.breitbart.com",
-      "outkick.com",
-      "techcrunch.com",
-      "marketwatch.com",
-      "dailysignal.com",
-      "s.yimg.com", // Yahoo Sports images
-      // ...etc.
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "nypost.com",
+      },
+      {
+        protocol: "https",
+        hostname: "pagesix.com",
+      },
+      {
+        protocol: "https",
+        hostname: "dw-wp-production.imgix.net",
+      },
+      {
+        protocol: "https",
+        hostname: "blogger.googleusercontent.com",
+      },
+      {
+        protocol: "https",
+        hostname: "media.zenfs.com",
+      },
+      // Add more as needed!
     ],
   },
-  // other Next.js config options can go here
 };
 
 module.exports = nextConfig;
