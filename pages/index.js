@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import ArticleCard from "../components/ArticleCard";
 
 const SOURCES = {
   bbc: "BBC News",
@@ -62,42 +63,10 @@ export default function Home() {
 
       {/* Main content */}
       <main className="max-w-screen-xl mx-auto px-4 my-8">
-
-        {/* 🔵 Tailwind test box */}
-        <div className="bg-blue-500 text-white p-4 rounded mb-6">
-          Tailwind is working 🎉
-        </div>
-
         {/* Article Grid */}
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {articles.map((article, index) => (
-            <a
-              key={index}
-              href={article.link}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-white rounded-lg shadow hover:shadow-lg transition duration-200 overflow-hidden"
-            >
-              <img
-                src={article.image || "/fallback.svg"}
-                alt={article.title || "NewsNow Article"}
-                className="w-full h-48 object-cover"
-              />
-              <div className="p-4">
-                <h2 className="font-semibold text-lg mb-1 flex items-center">
-                  {article.title}
-                  {article.pubDate &&
-                    new Date() - new Date(article.pubDate) < 3600000 && (
-                      <span className="ml-2 px-2 py-0.5 text-xs font-bold text-white bg-red-500 rounded">
-                        NEW
-                      </span>
-                    )}
-                </h2>
-                <p className="text-sm text-gray-500">
-                  {article.source} • {new Date(article.pubDate).toLocaleString()}
-                </p>
-              </div>
-            </a>
+            <ArticleCard article={article} key={index} />
           ))}
         </div>
       </main>
