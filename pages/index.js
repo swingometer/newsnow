@@ -35,7 +35,7 @@ export default function Home() {
 
   return (
     <main className="max-w-screen-xl mx-auto px-4 my-8">
-      <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+      <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 bg-red-200">
         {articles.map((article, index) => (
           <ArticleCard article={article} key={index} />
         ))}
